@@ -80,14 +80,25 @@ The reward plot shows raw episode rewards (faded) with a 20-episode rolling aver
 overlaid. The green dashed line at y=500 marks the "solved" threshold (CartPole-v1
 is considered solved when the agent consistently balances the pole for 500 steps).
 
-### Interrupt / Resume
+### Pause and Resume
 
-Press `Ctrl+C` at any time to gracefully stop training. The model is saved as
-`model_interrupted.zip` so you can run playback on it:
+Press `Ctrl+C` at any time to pause training. The model weights, replay buffer,
+and all episode history are saved automatically.
 
 ```bash
-python playback.py --run runs/<timestamp> --model model_interrupted
+# Pause: just Ctrl+C — you'll see:
+# [train] Paused. Resume with:
+#         python train.py --resume runs/20240101_120000
+
+# Resume from where you left off (same run directory, continuous plots):
+python train.py --resume runs/20240101_120000
+
+# Resume and extend the run beyond the original total_timesteps:
+python train.py --resume runs/20240101_120000 --steps 200000
 ```
+
+The replay buffer is restored on resume so the agent doesn't start cold —
+training continues as if it never stopped.
 
 ---
 
