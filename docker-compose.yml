@@ -2,6 +2,7 @@ services:
   train:
     build: .
     command: python train.py
+    stop_grace_period: 60s  # give time to flush replay buffer on docker stop
     volumes:
       # Mount runs/ so results persist on your host after the container exits
       - ./runs:/app/runs

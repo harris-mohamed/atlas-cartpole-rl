@@ -313,6 +313,7 @@ def main():
         sys.exit(0)
 
     signal.signal(signal.SIGINT, handle_interrupt)
+    signal.signal(signal.SIGTERM, handle_interrupt)  # docker stop sends SIGTERM
 
     model.learn(
         total_timesteps=remaining,
