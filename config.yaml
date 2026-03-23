@@ -1,0 +1,26 @@
+# DQN Hyperparameters for CartPole-v1
+# Edit these between runs to experiment.
+# All values can be overridden via CLI flags (see python train.py --help)
+
+training:
+  total_timesteps: 100000       # Total env steps to train for
+  seed: 42                      # Random seed for reproducibility
+
+model:
+  learning_rate: 0.0001         # Adam optimizer LR
+  batch_size: 64                # Minibatch size for gradient updates
+  buffer_size: 100000           # Replay buffer capacity
+  learning_starts: 1000         # Steps before first gradient update
+  train_freq: 4                 # Update model every N steps
+  target_update_interval: 1000  # Steps between target network syncs
+  gamma: 0.99                   # Discount factor
+  tau: 1.0                      # Soft update coefficient (1.0 = hard update)
+
+exploration:
+  exploration_fraction: 0.1     # Fraction of training spent decaying epsilon
+  exploration_initial_eps: 1.0  # Starting epsilon
+  exploration_final_eps: 0.05   # Final epsilon
+
+playback:
+  n_episodes: 3                 # Number of episodes to record during playback
+  fps: 30                       # GIF frame rate
