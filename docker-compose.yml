@@ -18,3 +18,15 @@ services:
       - ./runs:/app/runs
     # Usage: edit the command above or override at runtime:
     #   docker compose run playback python playback.py --run runs/20240101_120000
+
+  optimize:
+    build: .
+    command: python optimize.py --trials 50
+    stop_grace_period: 30s  # saves results on docker stop
+    volumes:
+      # optimization/ persists study.db and plots on your host
+      - ./optimization:/app/optimization
+    # Examples:
+    #   docker compose run optimize python optimize.py --trials 100
+    #   docker compose run optimize python optimize.py --resume
+    #   docker compose run optimize python optimize.py --best

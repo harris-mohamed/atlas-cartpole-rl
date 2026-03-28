@@ -8,3 +8,5 @@ imageio-ffmpeg==0.5.1
 torch==2.4.1
 # For rendering CartPole frames
 pygame==2.6.1
+# Hyperparameter optimization
+optuna==3.6.1

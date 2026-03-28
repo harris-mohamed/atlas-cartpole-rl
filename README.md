@@ -117,6 +117,44 @@ the full 500 steps.
 
 ---
 
+## Overnight Hyperparameter Search
+
+Not sure which hyperparameters to use? Let Optuna search overnight.
+It runs N trials, prunes bad ones early, and wakes you up with the best config.
+
+```bash
+# Run 50 trials overnight (default)
+docker compose run optimize
+
+# More trials = better search
+docker compose run optimize python optimize.py --trials 100
+
+# Safe to stop anytime — study is saved to optimization/study.db
+# Resume exactly where you left off:
+docker compose run optimize python optimize.py --resume
+
+# See best results so far without running more trials:
+docker compose run optimize python optimize.py --best
+```
+
+Outputs saved to `./optimization/` on your host:
+
+| File | What it is |
+|------|------------|
+| `optimization_history.png` | Reward per trial + best-so-far line |
+| `param_importances.png` | Which hyperparams mattered most |
+| `best_params.yaml` | Best config found |
+| `results.csv` | All trial results |
+| `study.db` | SQLite study (for --resume) |
+
+Once you have best params, plug them into a full training run:
+
+```bash
+python train.py --lr 0.0003 --batch-size 64 --buffer-size 50000 --steps 200000
+```
+
+---
+
 ## Experimenting
 
 Suggested experiments to learn from:
