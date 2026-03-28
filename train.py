@@ -20,10 +20,23 @@ Outputs (saved to runs/<timestamp>/):
 """
 
 import argparse
+import atexit
 import signal
 import sys
 from datetime import datetime
 from pathlib import Path
+
+# Close any open tqdm bars before Python tears down the import system,
+# otherwise rich raises "sys.meta_path is None" on exit.
+def _close_tqdm():
+    try:
+        import tqdm
+        for bar in list(tqdm.tqdm._instances):
+            bar.close()
+    except Exception:
+        pass
+
+atexit.register(_close_tqdm)
 
 import gymnasium as gym
 import matplotlib
