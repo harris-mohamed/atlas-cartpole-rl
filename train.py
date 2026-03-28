@@ -318,7 +318,7 @@ def main():
     model.learn(
         total_timesteps=remaining,
         callback=callback,
-        progress_bar=True,
+        progress_bar=False,
         reset_num_timesteps=False,  # preserves step count on resume
     )
 
