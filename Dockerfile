@@ -4,7 +4,7 @@ WORKDIR /app
 
 # System deps for rendering (pygame/SDL needs these even in headless mode)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libgl1-mesa-glx \
+    libgl1 \
     libglib2.0-0 \
     libsm6 \
     libxext6 \
