@@ -1,5 +1,5 @@
 gymnasium==0.29.1
-stable-baselines3==2.3.2
+stable-baselines3[extra]==2.3.2
 matplotlib==3.9.2
 numpy==1.26.4
 PyYAML==6.0.2
