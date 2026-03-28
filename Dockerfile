@@ -13,8 +13,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
-# Install PyTorch with CUDA 12.1 support first (must come before other deps)
-RUN pip install --no-cache-dir torch==2.4.1 --index-url https://download.pytorch.org/whl/cu121
+# PyTorch 2.6+ with CUDA 12.6 — required for Blackwell (RTX 50xx, sm_120)
+RUN pip install --no-cache-dir torch==2.6.0 --index-url https://download.pytorch.org/whl/cu126
 
 # Install remaining Python deps
 COPY requirements.txt .
