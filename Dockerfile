@@ -13,7 +13,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python deps
+# Install PyTorch with CUDA 12.1 support first (must come before other deps)
+RUN pip install --no-cache-dir torch==2.4.1 --index-url https://download.pytorch.org/whl/cu121
+
+# Install remaining Python deps
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
