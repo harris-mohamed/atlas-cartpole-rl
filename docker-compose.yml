@@ -1,7 +1,11 @@
+x-user: &user
+  user: "${UID:-1000}:${GID:-1000}"
+
 services:
   train:
     build: .
     command: python train.py
+    <<: *user
     stop_grace_period: 60s  # give time to flush replay buffer on docker stop
     volumes:
       - ./runs:/app/runs
@@ -19,6 +23,7 @@ services:
   playback:
     build: .
     command: python playback.py --run runs/REPLACE_WITH_RUN_DIR
+    <<: *user
     volumes:
       - ./runs:/app/runs
     deploy:
@@ -34,6 +39,7 @@ services:
   optimize:
     build: .
     command: python optimize.py --trials 50
+    <<: *user
     stop_grace_period: 30s
     volumes:
       - ./optimization:/app/optimization
