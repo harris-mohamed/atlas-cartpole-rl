@@ -2,11 +2,17 @@ services:
   train:
     build: .
     command: python train.py
+    stop_grace_period: 60s  # give time to flush replay buffer on docker stop
     volumes:
-      # Mount runs/ so results persist on your host after the container exits
       - ./runs:/app/runs
-      # Mount config so you can edit it without rebuilding the image
       - ./config.yaml:/app/config.yaml
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
     # Pass CLI overrides via environment or command override:
     #   docker compose run train python train.py --steps 50000 --lr 0.001
 
@@ -15,5 +21,30 @@ services:
     command: python playback.py --run runs/REPLACE_WITH_RUN_DIR
     volumes:
       - ./runs:/app/runs
-    # Usage: edit the command above or override at runtime:
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    # Usage:
     #   docker compose run playback python playback.py --run runs/20240101_120000
+
+  optimize:
+    build: .
+    command: python optimize.py --trials 50
+    stop_grace_period: 30s
+    volumes:
+      - ./optimization:/app/optimization
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    # Examples:
+    #   docker compose run optimize python optimize.py --trials 100
+    #   docker compose run optimize python optimize.py --resume
+    #   docker compose run optimize python optimize.py --best

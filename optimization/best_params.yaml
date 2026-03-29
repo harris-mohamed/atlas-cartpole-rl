@@ -1,0 +1,11 @@
+best_mean_reward: 475.9
+best_trial: 27
+params:
+  batch_size: 64
+  buffer_size: 10000
+  exploration_final_eps: 0.04492076026094095
+  exploration_fraction: 0.3208746202930086
+  gamma: 0.9395869927284984
+  learning_rate: 0.00028862808617394805
+  learning_starts: 1000
+  target_update_interval: 1000

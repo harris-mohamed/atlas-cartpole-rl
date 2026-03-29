@@ -80,14 +80,25 @@ The reward plot shows raw episode rewards (faded) with a 20-episode rolling aver
 overlaid. The green dashed line at y=500 marks the "solved" threshold (CartPole-v1
 is considered solved when the agent consistently balances the pole for 500 steps).
 
-### Interrupt / Resume
+### Pause and Resume
 
-Press `Ctrl+C` at any time to gracefully stop training. The model is saved as
-`model_interrupted.zip` so you can run playback on it:
+Press `Ctrl+C` at any time to pause training. The model weights, replay buffer,
+and all episode history are saved automatically.
 
 ```bash
-python playback.py --run runs/<timestamp> --model model_interrupted
+# Pause: just Ctrl+C — you'll see:
+# [train] Paused. Resume with:
+#         python train.py --resume runs/20240101_120000
+
+# Resume from where you left off (same run directory, continuous plots):
+python train.py --resume runs/20240101_120000
+
+# Resume and extend the run beyond the original total_timesteps:
+python train.py --resume runs/20240101_120000 --steps 200000
 ```
+
+The replay buffer is restored on resume so the agent doesn't start cold —
+training continues as if it never stopped.
 
 ---
 
@@ -103,6 +114,44 @@ It uses:
 CartPole-v1 has a 4-dimensional state (position, velocity, angle, angular velocity)
 and 2 actions (push left, push right). A well-trained agent balances the pole for
 the full 500 steps.
+
+---
+
+## Overnight Hyperparameter Search
+
+Not sure which hyperparameters to use? Let Optuna search overnight.
+It runs N trials, prunes bad ones early, and wakes you up with the best config.
+
+```bash
+# Run 50 trials overnight (default)
+docker compose run optimize
+
+# More trials = better search
+docker compose run optimize python optimize.py --trials 100
+
+# Safe to stop anytime — study is saved to optimization/study.db
+# Resume exactly where you left off:
+docker compose run optimize python optimize.py --resume
+
+# See best results so far without running more trials:
+docker compose run optimize python optimize.py --best
+```
+
+Outputs saved to `./optimization/` on your host:
+
+| File | What it is |
+|------|------------|
+| `optimization_history.png` | Reward per trial + best-so-far line |
+| `param_importances.png` | Which hyperparams mattered most |
+| `best_params.yaml` | Best config found |
+| `results.csv` | All trial results |
+| `study.db` | SQLite study (for --resume) |
+
+Once you have best params, plug them into a full training run:
+
+```bash
+python train.py --lr 0.0003 --batch-size 64 --buffer-size 50000 --steps 200000
+```
 
 ---
 

@@ -1,10 +1,12 @@
 gymnasium==0.29.1
-stable-baselines3==2.3.2
+stable-baselines3[extra]==2.3.2
 matplotlib==3.9.2
 numpy==1.26.4
 PyYAML==6.0.2
 imageio==2.35.1
 imageio-ffmpeg==0.5.1
-torch==2.4.1
+# torch installed separately in Dockerfile with CUDA support
 # For rendering CartPole frames
 pygame==2.6.1
+# Hyperparameter optimization
+optuna==3.6.1
