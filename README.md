@@ -1,5 +1,7 @@
 # CartPole RL Trainer
 
+![CartPole trained agent](docs/demo.gif)
+
 Train a DQN agent to solve CartPole-v1 using Stable-Baselines3 and Farama Gymnasium.
 Outputs reward/epsilon plots and episode playback GIFs.
 
